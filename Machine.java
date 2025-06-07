@@ -1,7 +1,6 @@
 package com.garage.gestionGarage;
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalTime;
 @Entity
 public class Machine {
     @Id
@@ -11,7 +10,7 @@ public class Machine {
 	private String modele;
     private String numeroImmatriculation;
     private LocalDate dateMiseEnService;
-    private LocalTime heureServiceMoteur;
+    private int heureServiceMoteur;
     private LocalDate dateProchainVidange;
     @Enumerated(EnumType.STRING)
     @Column(nullable=false)
@@ -40,10 +39,10 @@ public class Machine {
 	public void setDateMiseEnService(LocalDate dateMiseEnService) {
 		this.dateMiseEnService = dateMiseEnService;
 	}
-	public LocalTime getHeureServiceMoteur() {
+	public int getHeureServiceMoteur() {
 		return heureServiceMoteur;
 	}
-	public void setHeureServiceMoteur(LocalTime heureServiceMoteur) {
+	public void setHeureServiceMoteur(int heureServiceMoteur) {
 		this.heureServiceMoteur = heureServiceMoteur;
 	}
 	public LocalDate getDateProchainVidange() {
