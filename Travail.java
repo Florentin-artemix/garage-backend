@@ -1,25 +1,32 @@
 package com.garage.gestionGarage;
-import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table; 
 @Entity
-public class Travail {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
-    @ManyToOne
-    @JoinColumn(name="machine_id")
-    private Machine machine;
-    @ManyToOne
-    @JoinColumn(name="technicien_id")
-    private Technicien technicien;
-    private LocalDateTime heureDebut;
-    private LocalDateTime heureFin;
-    @Column(precision=4,scale=2)
-    private BigDecimal heureTravailMachine;
-    @Lob
-    private byte[] preuvePhoto;
+@Table(name="travail")
+public class Travail{
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
+	@ManyToOne
+	@JoinColumn(name="machineId",nullable=false)
+	private Machine machine;
+	@ManyToOne
+	@JoinColumn(name="technicienId",nullable=false)
+	private Technicien technicien;
+	private LocalDateTime heureDebut;
+	private LocalDateTime heureFin;
+	@Column(precision=5,scale=2)
+	private BigDecimal heureTravail;
 	public Long getId() {
 		return id;
 	}
@@ -50,17 +57,12 @@ public class Travail {
 	public void setHeureFin(LocalDateTime heureFin) {
 		this.heureFin = heureFin;
 	}
-	public BigDecimal getHeureTravailMachine() {
-		return heureTravailMachine;
+	public BigDecimal getHeureTravail() {
+		return heureTravail;
 	}
-	public void setHeureTravailMachine(BigDecimal heureTravailMachine) {
-		this.heureTravailMachine = heureTravailMachine;
+	public void setHeureTravail(BigDecimal heureTravail) {
+		this.heureTravail = heureTravail;
 	}
-	public byte[] getPreuvePhoto() {
-		return preuvePhoto;
-	}
-	public void setPreuvePhoto(byte[] preuvePhoto) {
-		this.preuvePhoto = preuvePhoto;
-	}
-    	
+	
 }
+
