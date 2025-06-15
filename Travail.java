@@ -1,7 +1,11 @@
 package com.garage.gestionGarage;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +14,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table; 
 @Entity
 @Table(name="travail")
@@ -25,8 +31,20 @@ public class Travail{
 	private Technicien technicien;
 	private LocalDateTime heureDebut;
 	private LocalDateTime heureFin;
+	@JsonProperty(access=Access.READ_ONLY)
 	@Column(precision=5,scale=2)
 	private BigDecimal heureTravail;
+	@PrePersist
+	@PreUpdate
+	private void calculerHeureTravail() {
+		if(heureDebut!=null && heureFin!=null) {
+			long minutes=java.time.Duration.between(heureDebut,heureFin).toMinutes();
+			double heure=minutes/60.0;
+			this.heureTravail=BigDecimal.valueOf(heure).setScale(2,RoundingMode.HALF_UP);
+		}else {
+			this.heureTravail=null;
+		}
+	}
 	public Long getId() {
 		return id;
 	}

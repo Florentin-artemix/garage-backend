@@ -32,7 +32,6 @@ public class TravailController{
 			t.setTechnicien(travailModifier.getTechnicien());
 			t.setHeureDebut(travailModifier.getHeureDebut());
 			t.setHeureFin(travailModifier.getHeureFin());
-			t.setHeureTravail(travailModifier.getHeureTravail());
 			travailRepository.save(t);
 			return "Travail Modifier avec succes";
 		}).orElse("Travail non Trouver");
