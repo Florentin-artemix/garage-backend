@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -16,7 +17,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table; 
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient; 
 @Entity
 @Table(name="travail")
 public class Travail{
@@ -31,6 +33,11 @@ public class Travail{
 	private Technicien technicien;
 	private LocalDateTime heureDebut;
 	private LocalDateTime heureFin;
+	@Column(name="preuve_photo")
+	@JsonIgnore
+	private byte[] preuvePhoto;
+	@Transient
+	private String preuvePhotoBase64;
 	@JsonProperty(access=Access.READ_ONLY)
 	@Column(precision=5,scale=2)
 	private BigDecimal heureTravail;
@@ -80,6 +87,18 @@ public class Travail{
 	}
 	public void setHeureTravail(BigDecimal heureTravail) {
 		this.heureTravail = heureTravail;
+	}
+	public byte[] getPreuvePhoto() {
+		return preuvePhoto;
+	}
+	public void setPreuvePhoto(byte[] preuvePhoto) {
+		this.preuvePhoto = preuvePhoto;
+	}
+	public String getPreuvePhotoBase64() {
+		return preuvePhotoBase64;
+	}
+	public void setPreuvePhotoBase64(String preuvePhotoBase64) {
+		this.preuvePhotoBase64 = preuvePhotoBase64;
 	}
 	
 }

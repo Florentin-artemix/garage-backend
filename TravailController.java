@@ -1,5 +1,7 @@
 package com.garage.gestionGarage;
 
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,30 @@ public class TravailController{
 	TravailRepository travailRepository;
 	@PostMapping
 	public String ajouterTravail(@RequestBody Travail travail) {
+		if(travail.getPreuvePhotoBase64()!=null) {
+			String propre=travail.getPreuvePhotoBase64().replaceAll("\\s+", "");
+			byte[] imagesBytes=Base64.getDecoder().decode(propre);
+			travail.setPreuvePhoto(imagesBytes);
+		}
 		travailRepository.save(travail);
 		return "Travail Enregistrer avec succès";
 	}
 	@GetMapping
-	public List<Travail>afficherTravail(){
-		return travailRepository.findAll();
+	public List<TravailDTO>afficherTravail(){
+		List<Travail> travaux=travailRepository.findAll();
+		List<TravailDTO> dtoList=new ArrayList<>();
+		for(Travail t : travaux) {
+			String nomTech=t.getTechnicien().getNom();
+			String prenomTech=t.getTechnicien().getPrenom();
+			String typeMachine=t.getMachine().getType();
+			String modeleMachine=t.getMachine().getModele();
+			String heureDebut=t.getHeureDebut() !=null ?t.getHeureDebut().toString(): null;
+			String heureFin=t.getHeureFin() !=null ?t.getHeureFin().toString(): null;
+			String heureTravail=t.getHeureTravail() !=null ?t.getHeureTravail().toString(): null;
+			String preuve64=t.getPreuvePhoto() !=null ? Base64.getEncoder().encodeToString(t.getPreuvePhoto()): null;
+			dtoList.add(new TravailDTO(nomTech,prenomTech,typeMachine,modeleMachine,heureDebut,heureFin,heureTravail,preuve64));
+		}
+		return dtoList;
 	}
 	@PutMapping("/{id}")
 	public String modifierTravail(@PathVariable Long id,@RequestBody Travail travailModifier) {
@@ -32,6 +52,11 @@ public class TravailController{
 			t.setTechnicien(travailModifier.getTechnicien());
 			t.setHeureDebut(travailModifier.getHeureDebut());
 			t.setHeureFin(travailModifier.getHeureFin());
+			if(travailModifier.getPreuvePhotoBase64()!=null) {
+				String propre=travailModifier.getPreuvePhotoBase64().replaceAll("\\s+", "");
+				byte[] imagesBytes=Base64.getDecoder().decode(propre);
+				t.setPreuvePhoto(imagesBytes);
+			}
 			travailRepository.save(t);
 			return "Travail Modifier avec succes";
 		}).orElse("Travail non Trouver");
