@@ -33,6 +33,7 @@ public class TravailController{
 		List<Travail> travaux=travailRepository.findAll();
 		List<TravailDTO> dtoList=new ArrayList<>();
 		for(Travail t : travaux) {
+			Long id=t.getId();
 			String nomTech=t.getTechnicien().getNom();
 			String prenomTech=t.getTechnicien().getPrenom();
 			String typeMachine=t.getMachine().getType();
@@ -41,7 +42,7 @@ public class TravailController{
 			String heureFin=t.getHeureFin() !=null ?t.getHeureFin().toString(): null;
 			String heureTravail=t.getHeureTravail() !=null ?t.getHeureTravail().toString(): null;
 			String preuve64=t.getPreuvePhoto() !=null ? Base64.getEncoder().encodeToString(t.getPreuvePhoto()): null;
-			dtoList.add(new TravailDTO(nomTech,prenomTech,typeMachine,modeleMachine,heureDebut,heureFin,heureTravail,preuve64));
+			dtoList.add(new TravailDTO(id,nomTech,prenomTech,typeMachine,modeleMachine,heureDebut,heureFin,heureTravail,preuve64));
 		}
 		return dtoList;
 	}
